@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Sound Player</title>
+    <style>
+    body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(45deg, #1a1a2e, #16213e);
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* ---- Container ---- */
+.container {
+    text-align: center;
+    width: 100%;
+}
+
+/* ---- Glass Effect Box ---- */
+.glass-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    margin-top: 20px;
+    width: 280px;
+}
+
+/* ---- Title ---- */
+h1 {
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ---- Sound Button ---- */
+.sound-button {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px auto;
+    box-shadow: 0px 5px 15px rgba(255, 75, 43, 0.5);
+}
+
+.sound-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 8px 20px rgba(255, 75, 43, 0.8);
+}
+
+.sound-button:active {
+    transform: scale(0.9);
+}
+
+/* ---- Sound Title ---- */
+#sound-title {
+    font-size: 16px;
+    opacity: 0.8;
+    margin-bottom: 15px;
+}
+
+/* ---- Download Button ---- */
+#download-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: linear-gradient(45deg, #28a745, #218838);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background 0.3s, transform 0.3s;
+}
+
+#download-btn:hover {
+    background: linear-gradient(45deg, #218838, #1e7e34);
+    transform: scale(1.1);
+}
+
+/* ---- Hidden Class ---- */
+.hidden {
+    display: none;
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🔊 Random Sound WindahBarusadar</h1>
+        <div class="glass-box">
+            <button class="sound-button" onclick="playRandomSound()">▶</button>
+            <p id="sound-title">Tekan tombol untuk memutar suara</p>
+            <a id="download-btn" class="hidden" download>📥 Download Sound</a>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+    let response = await fetch("https://raw.githubusercontent.com/BadXyz/txt/main/citacita/citacita.json");
+    window.sounds = await response.json();
+});
+
+function playRandomSound() {
+    if (!window.sounds || window.sounds.length === 0) {
+        alert("Suara tidak tersedia!");
+        return;
+    }
+
+    let randomSound = window.sounds[Math.floor(Math.random() * window.sounds.length)];
+    let audio = new Audio(randomSound);
+    audio.play();
+
+    // Tampilkan nama file
+    let fileName = randomSound.split('/').pop();
+    document.getElementById("sound-title").textContent = `Memutar: ${fileName}`;
+
+    // Update tombol download
+    let downloadBtn = document.getElementById("download-btn");
+    downloadBtn.href = randomSound;
+    downloadBtn.download = fileName;
+    downloadBtn.classList.remove("hidden");
+}
+    </script>
+</body>
+</html>
